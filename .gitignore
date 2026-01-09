@@ -1,0 +1,47 @@
+# ===============================
+# Python
+# ===============================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+env/
+venv/
+
+# ===============================
+# Dados (CSV, Parquet, etc.)
+# ===============================
+arquivos/**/*.csv
+arquivos/**/*.parquet
+arquivos/**/*.json
+
+# Mantém README e samples versionados
+!arquivos/**/README.md
+!arquivos/**/sample_*.csv
+
+# ===============================
+# Secrets
+# ===============================
+.env
+*.env
+
+# ===============================
+# dbt
+# ===============================
+dbt/**/target/
+dbt/**/dbt_packages/
+dbt/**/logs/
+
+# ===============================
+# Airflow
+# ===============================
+airflow/logs/
+airflow/plugins/__pycache__/
+
+# ===============================
+# OS / Editor
+# ===============================
+.DS_Store
+.vscode/
+.idea/
