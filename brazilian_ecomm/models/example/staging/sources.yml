@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: brazilian_ecomm
+    database: brazilian_ecomm
+    schema: raw
+    tables:
+      - name: raw_orders
+      - name: raw_order_items
+      - name: raw_sellers
+      - name: raw_products
+      - name: raw_order_payments
