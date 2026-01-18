@@ -1,0 +1,243 @@
+version: 2
+
+models:
+  - name: marts_forma_pgto
+    description: "Análise por forma de pagamento com objetivo de fornecer informações sobre as formas mais frequentes."
+    meta:
+      layer: marts
+      grain: forma_pgto
+      owner: analytics
+    columns:
+      - name: forma_pgto
+        description: "Método de pagamento escolhido pelo cliente."
+
+      - name: qtde_cupons
+        description: "Quantidade de pedidos (cupons) agregados."
+
+      - name: percentual
+        description: "Percentual calculado de cada forma de pagamento sobre o total."
+
+  - name: marts_top10_beleza_saude
+    description: "Análise de vendas e KPIs das top 10 cidades com maior volume de vendas na tacegoria de produtos 'beleza_saude'."
+    meta:
+      layer: marts
+      grain: estado, cidade
+      owner: analytics
+    columns:
+      - name: estado
+        description: "Estado onde o vendedor está localizado."
+
+      - name: cidade
+        description: "cidade onde o vendedor está localizado."
+
+      - name: venda_financeira
+        description: "Valor total de vendas (preço × quantidade)."
+
+      - name: qtde_cupons
+        description: "Quantidade de pedidos."
+
+      - name: tkt_medio
+        description: "Ticket médio por pedido (venda_financeira / qtde_cupons)."
+
+      - name: venda_fisica
+        description: "Quantidade total de itens vendidos."
+
+      - name: preco_medio
+        description: "Preço médio dos itens vendidos (venda_financeira / venda_fisica)."
+
+      - name: itens_por_cupom
+        description: "Quantidade média de itens por pedido."
+
+  - name: marts_top10_categorias_sp
+    description: "Análise de vendas e kpis das categorias de produto mais vendidas na cidade de 'sao paulo'."
+    meta:
+      layer: marts
+      grain: categoria
+      owner: analytics
+    columns:
+      - name: categoria
+        description: "Descrição da categoria de produto."
+      
+      - name: venda_financeira
+        description: "Valor total de vendas agregado no nível do modelo."
+
+      - name: qtde_cupons
+        description: "Quantidade de pedidos no ano."
+
+      - name: tkt_medio
+        description: "Ticket médio anual por pedido."
+
+      - name: venda_fisica
+        description: "Quantidade total de itens vendidos no ano."
+
+      - name: preco_medio
+        description: "Preço médio dos itens vendidos no ano."
+
+      - name: itens_por_cupom
+        description: "Quantidade média de itens por pedido no ano."
+
+  - name: marts_top10_categorias
+    description: "Análise de vendas e KPIs das top 10 categorias de produtos com maior volume de vendas."
+    meta:
+      layer: marts
+      grain: categoria
+      owner: analytics
+    columns:
+      - name: categoria
+        description: "Descrição da categoria de produto."
+      
+      - name: venda_financeira
+        description: "Valor total de vendas agregado no nível do modelo."
+
+      - name: qtde_cupons
+        description: "Quantidade de pedidos no ano."
+
+      - name: tkt_medio
+        description: "Ticket médio anual por pedido."
+
+      - name: venda_fisica
+        description: "Quantidade total de itens vendidos no ano."
+
+      - name: preco_medio
+        description: "Preço médio dos itens vendidos no ano."
+
+      - name: itens_por_cupom
+        description: "Quantidade média de itens por pedido no ano."
+
+  - name: marts_top10_cidades
+    description: "Análise de vendas e KPIs das top 10 cidades de produtos com maior volume de vendas."
+    meta:
+      layer: marts
+      grain: estado, cidade
+      owner: analytics
+    columns:
+      - name: estado
+        description: "Estado onde o vendedor está localizado."
+
+      - name: cidade
+        description: "Cidade onde o vendedor está localizado."
+      
+      - name: venda_financeira
+        description: "Valor total de vendas agregado no nível do modelo."
+
+      - name: qtde_cupons
+        description: "Quantidade de pedidos no ano."
+
+      - name: tkt_medio
+        description: "Ticket médio anual por pedido."
+
+      - name: venda_fisica
+        description: "Quantidade total de itens vendidos no ano."
+
+      - name: preco_medio
+        description: "Preço médio dos itens vendidos no ano."
+
+      - name: itens_por_cupom
+        description: "Quantidade média de itens por pedido no ano."
+
+  - name: marts_top10_estados
+    description: "Análise de vendas e KPIs dos top 10 estados com maior volume de vendas."
+    meta:
+      layer: marts
+      grain: estado
+      owner: analytics
+    columns:
+      - name: estado
+        description: "Estado onde o vendedor está localizado."
+     
+      - name: venda_financeira
+        description: "Valor total de vendas agregado no nível do modelo."
+
+      - name: qtde_cupons
+        description: "Quantidade de pedidos no ano."
+
+      - name: tkt_medio
+        description: "Ticket médio anual por pedido."
+
+      - name: venda_fisica
+        description: "Quantidade total de itens vendidos no ano."
+
+      - name: preco_medio
+        description: "Preço médio dos itens vendidos no ano."
+
+      - name: itens_por_cupom
+        description: "Quantidade média de itens por pedido no ano."
+
+  - name: marts_venda_acumulada
+    description: "Análise do acumulado de vendas ao longo do tempo."
+    meta:
+      layer: marts
+      grain: ano_pedido, mes_pedido
+      owner: analytics
+    columns:
+      - name: ano_pedido
+        description: "Ano em que o pedido foi realizado."
+
+      - name: mes_pedido
+        description: "Mês em que o pedido foi realizado."
+     
+      - name: venda_financeira
+        description: "Valor total de vendas agregado no nível do modelo."
+
+      - name: venda_financeira_acumulada
+        description: "Valor acumulado de venda financeira."
+
+  - name: marts_venda_ano_mes
+    description: "Análise de vendas e KPIs por ano e mês."
+    meta:
+      layer: marts
+      grain: ano_pedido, mes_pedido
+      owner: analytics
+    columns:
+      - name: ano_pedido
+        description: "Ano em que o pedido foi realizado."
+
+      - name: mes_pedido
+        description: "Mês em que o pedido foi realizado."
+     
+      - name: venda_financeira
+        description: "Valor total de vendas agregado no nível do modelo."
+
+      - name: qtde_cupons
+        description: "Quantidade de pedidos no ano."
+
+      - name: tkt_medio
+        description: "Ticket médio anual por pedido."
+
+      - name: venda_fisica
+        description: "Quantidade total de itens vendidos no ano."
+
+      - name: preco_medio
+        description: "Preço médio dos itens vendidos no ano."
+
+      - name: itens_por_cupom
+        description: "Quantidade média de itens por pedido no ano."
+
+  - name: marts_venda_ano
+    description: "Análise de vendas e KPIs por ano."
+    meta:
+      layer: marts
+      grain: ano_pedido
+      owner: analytics
+    columns:
+      - name: ano_pedido
+        description: "Ano em que o pedido foi realizado."
+     
+      - name: venda_financeira
+        description: "Valor total de vendas agregado no nível do modelo."
+
+      - name: qtde_cupons
+        description: "Quantidade de pedidos no ano."
+
+      - name: tkt_medio
+        description: "Ticket médio anual por pedido."
+
+      - name: venda_fisica
+        description: "Quantidade total de itens vendidos no ano."
+
+      - name: preco_medio
+        description: "Preço médio dos itens vendidos no ano."
+
+      - name: itens_por_cupom
+        description: "Quantidade média de itens por pedido no ano."
+

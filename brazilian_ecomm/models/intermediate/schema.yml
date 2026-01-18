@@ -1,0 +1,217 @@
+version: 2
+
+models:
+  - name: int_forma_pagamento
+    description: "Informações sobre quantidade de pedidos por forma de pagamento."
+    meta:
+      layer: intermediate
+      grain: forma_pgto
+      owner: analytics
+    columns:
+      - name: forma_pgto
+        description: "Método de pagamento escolhido pelo cliente."
+
+      - name: qtde_cupons
+        description: "Quantidade de pedidos (cupons) agregados."
+
+      - name: percentual
+        description: "Percentual calculado de cada forma de pagamento sobre o total."
+
+  - name: int_vendas_acumulado
+    description: "Modelo intermediário no nível de granularidade ano-mês, contendo métricas do acumulado de vendas."
+    meta:
+      layer: intermediate
+      grain: ano_pedido, mes_pedido
+      owner: analytics
+    columns:
+      - name: ano_pedido
+        description: "Ano em que o pedido foi realizado."
+
+      - name: mes_pedido
+        description: "Mês em que o pedido foi realizado."
+
+      - name: venda_financeira
+        description: "Valor total de vendas (preço × quantidade), agregado no nível do modelo."
+      
+      - name: venda_financeira_acumulada
+        description: "Valor acumulado de vendas ao longo do tempo dentro do ano."
+
+  - name: int_vendas_ano_mes
+    description: "Modelo intermediário no nível de granularidade ano-mês, contendo métricas e KPIs consolidados de vendas."
+    meta:
+      layer: intermediate
+      grain: ano_pedido, mes_pedido
+      owner: analytics
+    columns:
+      - name: ano_pedido
+        description: "Ano em que o pedido foi realizado."
+      
+      - name: mes_pedido
+        description: "Mês em que o pedido foi realizado."
+
+      - name: venda_financeira
+        description: "Valor total de vendas (preço × quantidade)."
+
+      - name: qtde_cupons
+        description: "Quantidade de pedidos."
+
+      - name: tkt_medio
+        description: "Ticket médio por pedido (venda_financeira / qtde_cupons)."
+
+      - name: venda_fisica
+        description: "Quantidade total de itens vendidos."
+
+      - name: preco_medio
+        description: "Preço médio dos itens vendidos (venda_financeira / venda_fisica)."
+
+      - name: itens_por_cupom
+        description: "Quantidade média de itens por pedido."
+
+  - name: int_vendas_ano
+    description: "Modelo intermediário no nível de granularidade ano, contendo métricas e KPIs consolidados de vendas."
+    meta:
+      layer: intermediate
+      grain: ano_pedido
+      owner: analytics
+    columns:
+      - name: ano_pedido
+        description: "Ano em que o pedido foi realizado."
+      
+      - name: venda_financeira
+        description: "Valor total de vendas no ano."
+
+      - name: qtde_cupons
+        description: "Quantidade de pedidos no ano."
+
+      - name: tkt_medio
+        description: "Ticket médio anual por pedido."
+
+      - name: venda_fisica
+        description: "Quantidade total de itens vendidos no ano."
+
+      - name: preco_medio
+        description: "Preço médio dos itens vendidos no ano."
+
+      - name: itens_por_cupom
+        description: "Quantidade média de itens por pedido no ano."
+
+  - name: int_vendas_categorias_cidades
+    description: "Modelo intermediário no nível de granularidade estado-cidade-categoria, contendo métricas e KPIs consolidados de vendas."
+    meta:
+      layer: intermediate
+      grain: estado, cidade, categoria
+      owner: analytics
+    columns:
+      - name: estado
+        description: "Estado onde o vendedor está localizado."
+      
+      - name: cidade
+        description: "Cidade onde o vendedor está localizado."
+
+      - name: categoria
+        description: "Categoria do produto."
+
+      - name: venda_financeira
+        description: "Valor total de vendas."
+
+      - name: qtde_cupons
+        description: "Quantidade de pedidos."
+
+      - name: tkt_medio
+        description: "Ticket médio por pedido."
+
+      - name: venda_fisica
+        description: "Quantidade de itens vendidos."
+
+      - name: preco_medio
+        description: "Preço médio dos itens vendidos."
+
+      - name: itens_por_cupom
+        description: "Quantidade média de itens por pedido."
+
+  - name: int_vendas_categorias
+    description: "Modelo intermediário no nível de granularidade categoria de produto, contendo métricas e KPIs consolidados de vendas."
+    meta:
+      layer: intermediate
+      grain: categoria
+      owner: analytics
+    columns:
+      - name: categoria
+        description: "Categoria do produto."
+
+      - name: venda_financeira
+        description: "Valor total de vendas."
+
+      - name: qtde_cupons
+        description: "Quantidade de pedidos."
+
+      - name: tkt_medio
+        description: "Ticket médio por pedido."
+
+      - name: venda_fisica
+        description: "Quantidade de itens vendidos."
+
+      - name: preco_medio
+        description: "Preço médio dos itens vendidos."
+
+      - name: itens_por_cupom
+        description: "Quantidade média de itens por pedido."
+
+  - name: int_vendas_cidades
+    description: "Modelo intermediário no nível de granularidade estado-cidade, contendo métricas e KPIs consolidados de vendas."
+    meta:
+      layer: intermediate
+      grain: estado, cidade
+      owner: analytics
+    columns:
+      - name: estado
+        description: "Estado onde o vendedor está localizado."
+
+      - name: cidade
+        description: "Cidade onde o vendedor está localizado."
+
+      - name: venda_financeira
+        description: "Valor total de vendas."
+
+      - name: qtde_cupons
+        description: "Quantidade de pedidos."
+
+      - name: tkt_medio
+        description: "Ticket médio por pedido."
+
+      - name: venda_fisica
+        description: "Quantidade de itens vendidos."
+
+      - name: preco_medio
+        description: "Preço médio dos itens vendidos."
+
+      - name: itens_por_cupom
+        description: "Quantidade média de itens por pedido."
+
+  - name: int_vendas_estados
+    description: "Modelo intermediário no nível de granularidade estado, contendo métricas e KPIs consolidados de vendas."
+    meta:
+      layer: intermediate
+      grain: estado
+      owner: analytics
+    columns:
+      - name: estado
+        description: "Estado onde o vendedor está localizado."
+
+      - name: venda_financeira
+        description: "Valor total de vendas."
+
+      - name: qtde_cupons
+        description: "Quantidade de pedidos."
+
+      - name: tkt_medio
+        description: "Ticket médio por pedido."
+
+      - name: venda_fisica
+        description: "Quantidade de itens vendidos."
+
+      - name: preco_medio
+        description: "Preço médio dos itens vendidos."
+
+      - name: itens_por_cupom
+        description: "Quantidade média de itens por pedido."

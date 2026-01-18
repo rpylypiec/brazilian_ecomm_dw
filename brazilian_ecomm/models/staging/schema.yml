@@ -1,0 +1,92 @@
+version: 2
+
+models:
+  - name: stg_sellers
+    description: "Informações sobre os vendedores que processaram pedidos na Olist."
+    columns:
+      - name: seller_id
+        description: "Identificador exclusivo do vendedor."
+        tests:
+          - not_null
+          - unique
+
+      - name: estado
+        description: "Estado onde o vendedor está localizado."
+
+      - name: cidade
+        description: "Cidade onde o vendedor está localizado."
+
+  - name: stg_products
+    description: "Informações sobre os produtos vendidos na Olist."
+    columns:
+      - name: produto_id
+        description: "Identificador exclusivo do produto."
+        tests:
+          - not_null
+          - unique
+
+      - name: categoria
+        description: "Categoria raiz do produto."
+        tests:
+          - not_null
+
+  - name: stg_orders
+    description: "Tabela de pedidos (entidade pai do modelo de dados)."
+    columns:
+      - name: cupom_id
+        description: "Identificador único do pedido."
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_order_items
+    description: "Itens comprados em cada pedido."
+    columns:
+      - name: cupom_id
+        description: "Identificador do pedido ao qual o item pertence."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_orders')
+              field: cupom_id
+
+      - name: qtde_itens
+        description: "Quantidade de unidades do produto vendidas no pedido."
+        tests:
+          - not_null
+
+      - name: produto_id
+        description: "Identificador exclusivo do produto."
+        tests:
+          - not_null
+
+      - name: seller_id
+        description: "Identificador exclusivo do vendedor."
+        tests:
+          - not_null
+
+      - name: preco
+        description: "Preço unitário do item."
+        tests:
+          - not_null
+
+      - name: frete
+        description: "Valor do frete associado ao item do pedido."
+        tests:
+          - not_null
+
+  - name: stg_order_payments
+    description: "Informações sobre as opções de pagamento utilizadas nos pedidos."
+    columns:
+      - name: cupom_id
+        description: "Identificador do pedido."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_orders')
+              field: cupom_id
+
+      - name: forma_pgto
+        description: "Método de pagamento escolhido pelo cliente."
+        tests:
+          - not_null
