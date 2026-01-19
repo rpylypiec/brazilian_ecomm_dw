@@ -52,6 +52,8 @@ A modelagem relacional original do dataset pode ser visualizada no diagrama abai
 * **PostgreSQL** – Banco de dados relacional
 * **dbt Core** – Transformações e documentação
 * **Python** – Processo de carga (EL)
+* **Airflow** – Orquestração do pipeline
+* **Docker / Docker Compose** – Isolamento de ambiente
 * **Git / GitHub** – Versionamento
 * **VS Code** – Ambiente de desenvolvimento
 
@@ -195,6 +197,26 @@ Linhagem final de todas as camadas criadas:
 
 ![Linhagem dos dados](docs/images/dbt-dag_brazilian_ecomm.png)
 
+---
+
+### 🔹 Diagrama Atualizado do Pipeline
+
++-------------------+       +--------------------+       +--------------------+
+|  CSV Local Files  |  EL   |   PostgreSQL Raw   |  T    |      dbt Models    |
+| orders, products, | ----> |  raw tables        | ----> | Staging /          |
+| payments, etc.    |       |                    |       | Intermediate / Marts|
++-------------------+       +--------------------+       +--------------------+
+           |                          |                        |
+           |                          |                        |
+           v                          v                        v
+   +-------------------+       +--------------------+       +--------------------+
+   |  Docker Compose   |       |    Airflow DAGs    |       |    dbt Docs        |
+   | Postgres / Airflow|<----->| orchestrating EL+T |       | HTML Documentation |
+   |  Volumes / Logs   |       |                    |       |                    |
+   +-------------------+       +--------------------+       +--------------------+
+
+--
+
 ## 📈 Perguntas de Negócio Respondidas
 
 Com base nos marts desenvolvidos, o projeto responde perguntas como:
@@ -221,7 +243,7 @@ Com base nos marts desenvolvidos, o projeto responde perguntas como:
 * Quais categorias se destacam em São Paulo?
 * Como se comportam preço médio e volume por categoria?
 
----
+--
 
 ## 📚 Documentação
 
@@ -241,6 +263,127 @@ dbt docs serve
 
 ---
 
+## 💻 Como Rodar o Pipeline Localmente
+
+Siga estas instruções para rodar **o pipeline completo** na sua máquina, incluindo PostgreSQL, Airflow, EL com Python e T com dbt.
+
+---
+
+### 1️⃣ Pré-requisitos
+
+Antes de começar, instale os seguintes softwares:
+
+* [Docker](https://www.docker.com/get-started)
+* [Docker Compose](https://docs.docker.com/compose/install/)
+* [Git](https://git-scm.com/)
+* (Opcional) VS Code ou outro editor de código
+
+> Certifique-se de que as portas 5432 (Postgres), 8080 (Airflow) e 8081 (dbt docs) estão livres.
+
+---
+
+### 2️⃣ Clonar o repositório
+
+```bash
+git clone https://github.com/seu-usuario/brazilian_ecomm_dw.git
+cd brazilian_ecomm_dw
+```
+
+### 3️⃣ Configurar variáveis e credenciais
+
+* Se existir, copie .env.example para .env:
+
+```bash
+cp .env.example .env
+```
+
+### 4️⃣ Subir o ambiente Docker
+
+```bash
+docker compose up -d
+```
+
+Isso vai criar e iniciar:
+
+* PostgreSQL (banco de dados)
+
+* Airflow (scheduler, webserver e worker)
+
+* Volumes persistentes para dados e logs
+
+Verifique se os containers estão rodando:
+
+```bash
+docker ps
+```
+
+### 5️⃣ Acessar Airflow
+
+* Abra http://localhost:8080 no navegador
+
+* Usuário/senha padrão: airflow / airflow
+
+* DAG principal: brazilian_ecomm_pipeline
+
+* É possível executar manualmente ou configurar agendamento
+
+### 6️⃣ Executar dbt dentro do container
+
+Entre no container do Airflow:
+
+```bash
+docker exec -it airflow-webserver bash
+cd /opt/airflow/brazilian_ecomm
+```
+
+Execute os comandos dbt:
+
+```bash
+# Rodar todas as transformações
+dbt run
+
+# Gerar documentação
+dbt docs generate
+
+# Servir documentação via web
+dbt docs serve --port 8081
+```
+
+* A documentação estará disponível em http://localhost:8081
+
+* Caso a porta 8081 já esteja em uso, escolha outra porta:
+
+```bash
+dbt docs serve --port 8082
+```
+
+### 7️⃣ Parar e limpar o ambiente
+
+Para parar os containers e liberar recursos:
+
+```bash
+docker compose down
+```
+
+Para remover volumes e dados persistentes (opcional):
+
+```bash
+docker compose down -v
+```
+
+### 🔧 Dicas úteis
+
+* Logs do Airflow:
+
+```bash
+docker logs -f airflow-webserver
+docker logs -f airflow-scheduler
+```
+
+* Se houver conflitos de portas, altere no docker-compose.yml ou no comando dbt.
+
+* Sempre garanta que os dados CSV estejam na pasta data/raw antes de rodar o EL.
+
 ## 🧠 Conclusão
 
 Este projeto demonstra um pipeline analítico completo, seguindo boas práticas de:
@@ -259,4 +402,4 @@ Ele pode ser facilmente estendido para:
 ---
 
 📌 **Autor:** Raphael Pylypiec
-📌 **Stack:** PostgreSQL • dbt • Python
+📌 **Stack:** PostgreSQL • dbt • Python • Airflow • Docker

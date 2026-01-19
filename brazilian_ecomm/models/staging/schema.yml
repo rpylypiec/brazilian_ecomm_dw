@@ -4,7 +4,7 @@ models:
   - name: stg_sellers
     description: "Informações sobre os vendedores que processaram pedidos na Olist."
     columns:
-      - name: seller_id
+      - name: vendedor_id
         description: "Identificador exclusivo do vendedor."
         tests:
           - not_null
@@ -60,7 +60,7 @@ models:
         tests:
           - not_null
 
-      - name: seller_id
+      - name: vendedor_id
         description: "Identificador exclusivo do vendedor."
         tests:
           - not_null

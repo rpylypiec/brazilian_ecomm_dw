@@ -1,0 +1,81 @@
+version: "3.8"
+
+services:
+
+  postgres:
+    image: postgres:15
+    container_name: postgres_brazilian_ecomm
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: brazilian_ecomm
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  airflow-webserver:
+    build:
+      context: .
+      dockerfile: docker/airflow/Dockerfile
+    container_name: airflow-webserver
+    depends_on:
+      - postgres
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/brazilian_ecomm
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./etl:/opt/airflow/etl
+      - ./arquivos:/opt/airflow/arquivos
+
+      # 🔹 Projeto dbt (RELATIVO, correto)
+      - ./brazilian_ecomm:/opt/airflow/brazilian_ecomm
+
+      # 🔹 Profiles do dbt
+      - ~/.dbt:/home/airflow/.dbt
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    command: >
+      bash -c "
+        airflow db migrate &&
+        airflow users create
+          --username admin
+          --password admin
+          --firstname Admin
+          --lastname User
+          --role Admin
+          --email admin@example.com || true &&
+        airflow webserver
+      "
+
+  airflow-scheduler:
+    build:
+      context: .
+      dockerfile: docker/airflow/Dockerfile
+    container_name: airflow-scheduler
+    depends_on:
+      - postgres
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/brazilian_ecomm
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./etl:/opt/airflow/etl
+      - ./arquivos:/opt/airflow/arquivos
+
+      # 🔹 Projeto dbt
+      - ./brazilian_ecomm:/opt/airflow/brazilian_ecomm
+
+      # 🔹 Profiles do dbt
+      - ~/.dbt:/home/airflow/.dbt
+    command: airflow scheduler
+
+volumes:
+  postgres_data:
