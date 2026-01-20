@@ -200,7 +200,7 @@ Linhagem final de todas as camadas criadas:
 ---
 
 ### 🔹 Diagrama Atualizado do Pipeline
-
+```
 +-------------------+       +--------------------+       +--------------------+
 |  CSV Local Files  |  EL   |   PostgreSQL Raw   |  T    |      dbt Models    |
 | orders, products, | ----> |  raw tables        | ----> | Staging /          |
@@ -214,7 +214,7 @@ Linhagem final de todas as camadas criadas:
    | Postgres / Airflow|<----->| orchestrating EL+T |       | HTML Documentation |
    |  Volumes / Logs   |       |                    |       |                    |
    +-------------------+       +--------------------+       +--------------------+
-
+```
 --
 
 ## 📈 Perguntas de Negócio Respondidas
